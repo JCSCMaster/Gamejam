@@ -1,4 +1,5 @@
 package view;
+import javafx.application.Application;
 /**
  * Implementation of the Gamejam project.
  * Acts as the Init class.
