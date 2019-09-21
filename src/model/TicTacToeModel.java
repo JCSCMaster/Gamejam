@@ -49,8 +49,8 @@ public class TicTacToeModel extends Observable implements Serializable {
     }
 
     /**
-     * starts a new game and sends observers a String that they can use to identify
-     * this fact.
+     * starts a new game and sends observers a String that they can use to
+     * identify this fact.
      */
     public void startNewGame() {
         initializeBoard();
@@ -78,8 +78,8 @@ public class TicTacToeModel extends Observable implements Serializable {
 
     /**
      * Checks that the move is legal then toggles the X at that location if so.
-     * Subsequently calls code to have the AI choose their next move and makes that
-     * move as well, unless testing is enabled.
+     * Subsequently calls code to have the AI choose their next move and makes
+     * that move as well, unless testing is enabled.
      * 
      * @param row  the row value, 0-2
      * @param col  the column value, 0-2
@@ -99,8 +99,8 @@ public class TicTacToeModel extends Observable implements Serializable {
     }
 
     /**
-     * Toggles the value on the board to 'O' indicating the AI's move, notifies the
-     * views that they need to update
+     * Toggles the value on the board to 'O' indicating the AI's move, notifies
+     * the views that they need to update
      * 
      * @param row the row value of the move, 0-2
      * @param col the column value of the move, 0-2
@@ -124,18 +124,20 @@ public class TicTacToeModel extends Observable implements Serializable {
     }
 
     /**
-     * checks if player with move of char c won in any of the three possible ways
+     * checks if player with move of char c won in any of the three possible
+     * ways
      * 
      * @param c the player's move, X or O
      * @return true if the player with move c won, false otherwise
      */
-    private boolean won(char c) {
+    public boolean won(char c) {
         return wonVertically(c) || wonHorizontally(c) || wonDiagonally(c);
     }
 
     // TODO check to see if this is bad style. It's hard coding, but tic tac toe
     // specifically uses
-    // a 3 by 3 board and this lets me check diagonals in a couple of lines instead
+    // a 3 by 3 board and this lets me check diagonals in a couple of lines
+    // instead
     // of almost 20.
     /**
      * checks the two diagonals to see if the player won
@@ -145,7 +147,8 @@ public class TicTacToeModel extends Observable implements Serializable {
      */
     private boolean wonDiagonally(char c) {
         if (board[1][1] != c) {
-            return (board[0][0] == c && board[2][2] == c) || (board[2][0] == c && board[0][2] == c);
+            return (board[0][0] == c && board[2][2] == c)
+                    || (board[2][0] == c && board[0][2] == c);
         }
         return false;
     }
@@ -154,14 +157,15 @@ public class TicTacToeModel extends Observable implements Serializable {
      * checks to see if the player won on a row
      * 
      * @param c the players move, X or O
-     * @return true if the player with move C won on a horizontal, false otherwise
+     * @return true if the player with move C won on a horizontal, false
+     *         otherwise
      */
     private boolean wonHorizontally(char c) {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (board[row][col] != c) {
                     break;
-                } else if (col == size) {
+                } else if (col == size - 1) {
                     return true;
                 }
             }
@@ -173,14 +177,15 @@ public class TicTacToeModel extends Observable implements Serializable {
      * checks to see if the player won on a column
      * 
      * @param c the player's move, X or O
-     * @return true if the player with move C won on a horizontal, false otherwise
+     * @return true if the player with move C won on a horizontal, false
+     *         otherwise
      */
     private boolean wonVertically(char c) {
         for (int col = 0; col < size; col++) {
             for (int row = 0; row < size; row++) {
                 if (board[row][col] != c) {
                     break;
-                } else if (row == size) {
+                } else if (row == size - 1) {
                     return true;
                 }
             }
@@ -189,8 +194,8 @@ public class TicTacToeModel extends Observable implements Serializable {
     }
 
     /**
-     * Simple check to see if the game is a draw, occurs when neither X or O won and
-     * there are no moves remaining
+     * Simple check to see if the game is a draw, occurs when neither X or O won
+     * and there are no moves remaining
      * 
      * @return a boolean, true if the game is a draw, false otherwise
      */
@@ -199,8 +204,8 @@ public class TicTacToeModel extends Observable implements Serializable {
     }
 
     /**
-     * Gets the state of the board as a 2D character array with possible values of
-     * 'X', 'O', and '_';
+     * Gets the state of the board as a 2D character array with possible values
+     * of 'X', 'O', and '_';
      * 
      * @return a char[][] representing the board accessed by [row][col]
      */
@@ -234,5 +239,112 @@ public class TicTacToeModel extends Observable implements Serializable {
      */
     public boolean available(int row, int col) {
         return board[row][col] == '_';
+    }
+
+    /**
+     * returns the exterior winning points of a win, from left to right and top
+     * to bottom with that priority
+     * 
+     * @return the two exterior points on the winning slice
+     */
+    public int[] getWinningPoints() {
+        int[] retVal;
+        if (wonHorizontally('X') || wonHorizontally('O')) {
+            retVal = getHorizontalPoints();
+        } else if (wonVertically('X') || wonVertically('O')) {
+            retVal = getVerticalPoints();
+        } else {
+            retVal = getDiagonalPoints();
+        }
+        return retVal;
+
+    }
+
+    /**
+     * finds the winning points on the horizontal direction
+     * 
+     * @return the exterior winning point in {row1, col1, row2, col2} form
+     */
+    private int[] getHorizontalPoints() {
+        int[] retVal = new int[4];
+        retVal[1] = 0;
+        retVal[3] = 2;
+        for (int row = 0; row < size; row++) {
+            char c = board[row][0];
+            for (int col = 0; col < size; col++) {
+                if (board[row][col] != c) {
+                    break;
+                } else if (col == size - 1) {
+                    retVal[0] = row;
+                    retVal[2] = row;
+                    return retVal;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * finds the winning points on the vertical direction
+     * 
+     * @return the exterior winning points in {row1, col1, row2, col2} form
+     */
+    private int[] getVerticalPoints() {
+        int[] retVal = new int[4];
+        retVal[0] = 0;
+        retVal[2] = 2;
+        for (int col = 0; col < size; col++) {
+            char c = board[0][col];
+            for (int row = 0; row < size; row++) {
+                if (board[row][col] != c) {
+                    break;
+                } else if (row == size - 1) {
+                    retVal[1] = col;
+                    retVal[3] = col;
+                    return retVal;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * finds the winning points on the diagonal
+     * 
+     * @return the exterior winning points in {row1, col1, row2, col2} form
+     */
+    private int[] getDiagonalPoints() {
+        int[] retVal = new int[4];
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+            retVal[0] = 0;
+            retVal[1] = 0;
+            retVal[2] = 2;
+            retVal[3] = 2;
+        } else {
+            retVal[0] = 2;
+            retVal[1] = 0;
+            retVal[2] = 0;
+            retVal[3] = 2;
+        }
+        return retVal;
+    }
+
+    /**
+     * returns a string denoting the directionality of the win
+     * 
+     * @return "horizontal", "vertical", "topLeftDiagonal", or
+     *         "bottomLeftDiagonal"
+     */
+    public String getWinningDirection() {
+        if (wonHorizontally('X') || wonHorizontally('O')) {
+            return "horizontal";
+        } else if (wonVertically('X') || wonVertically('O')) {
+            return "vertical";
+        } else {
+            if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+                return "topLeftDiagonal";
+            }
+            return "bottomLeftDiagonal";
+        }
     }
 }
