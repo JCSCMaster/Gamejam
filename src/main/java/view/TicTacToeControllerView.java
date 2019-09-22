@@ -3,6 +3,8 @@ package view;
 import java.util.Observable;
 import java.util.Observer;
 
+import java.awt.Point;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -59,8 +61,8 @@ public class TicTacToeControllerView extends Canvas implements Observer {
      * gets the resources for this game
      */
     private void setupResources() {
-        // TODO xImage = new Image("xImage file path");
-        // TODO yImage = new Image("yImage file path");
+        xImage = new Image(TicTacToeControllerView.class.getResource("/letterX.png").toString());
+        //yImage = new Image("letterX.png");
     }
 
     /**
@@ -83,7 +85,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
     private void drawMove(int row, int col, char c) {
         Image drawImage = c == 'X' ? xImage : yImage;
         gc.drawImage(drawImage, 0, 0, drawImage.getWidth(),
-                drawImage.getHeight(), col * 200 + 10, row * 200 + 10, 180,
+                drawImage.getHeight(), row * 200 + 10, col * 200 + 10, 180,
                 180);
     }
 
@@ -100,7 +102,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if (currState[row][col] != '_') {
-                    drawMove(row, col, currState[row][col]);
+                    drawMove(col, row, currState[row][col]);
                 }
             }
         }
@@ -114,7 +116,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         this.setOnMouseClicked((click) -> {
             int x = (int) click.getX() / 200;
             int y = (int) click.getY() / 200;
-            gameModel.humanMove(x, y, false);
+            gameModel.humanMove(y, x, false);
         });
     }
 
@@ -126,35 +128,32 @@ public class TicTacToeControllerView extends Canvas implements Observer {
     public void update(Observable arg0, Object arg1) {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         drawBoard();
+        System.out.println(gameModel.toString());
         if (gameModel.won('X') || gameModel.won('C')) {
-            String dir = gameModel.getWinningDirection();
-            int[] points = gameModel.getWinningPoints();
-            for (int i : points) {
-                i = i * 200;
-            }
-            gc.setStroke(Color.PALEVIOLETRED);
-
-            // since we know the two winning points, from left to right
-            // and top to bottom with that priority, we can use the direction
-            // of the win to determine how to draw our line
-            switch (dir) {
-            case "vertical":
-                points[0] += 100;
-                points[2] += 100;
-                points[3] += 200;
-                break;
+            String winningDirection = gameModel.getWinningDirection();
+            Point[] winningSquares = gameModel.getWinningSquares(winningDirection);
+            gc.setStroke(Color.MEDIUMVIOLETRED);
+            
+            switch(winningDirection) {
             case "horizontal":
-                points[1] += 100;
-                points[2] += 200;
-                points[3] += 100;
+                gc.strokeLine(0, winningSquares[0].x*200+100, 600, winningSquares[2].x*200+100);
+                System.out.println("horizontal " + winningSquares[0].toString());
+                System.out.println(winningSquares[1].toString());
+                System.out.println(winningSquares[2].toString());
                 break;
-            case "topLeftDiagonal":
-                points[2] += 200;
-                points[3] += 200;
+            case "vertical":
+                gc.strokeLine(winningSquares[0].y*200+100, 0, winningSquares[2].y*200+100, 600);
+                System.out.println("vertical " + winningSquares[0].toString());
+                System.out.println(winningSquares[1].toString());
+                System.out.println(winningSquares[2].toString());
                 break;
-            case "bottomLeftDiagonal":
-                points[1] += 200;
-                points[2] += 200;
+            case "diagonal":
+                if(winningSquares[0].x == 0) {
+                    gc.strokeLine(0, 0, 600, 600);
+                }
+                else {
+                    gc.strokeLine(0, 600, 600, 0);
+                }
                 break;
             }
         }
