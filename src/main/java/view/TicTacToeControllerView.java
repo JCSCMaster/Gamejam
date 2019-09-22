@@ -95,7 +95,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         gc.strokeLine(200, 0, 200, 600);
         gc.strokeLine(400, 0, 400, 600);
         gc.strokeLine(0, 200, 600, 200);
-        gc.strokeLine(0, 400, 0, 600);
+        gc.strokeLine(0, 400, 600, 400);
         char[][] currState = gameModel.getBoard();
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
