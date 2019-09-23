@@ -31,7 +31,7 @@ public class TicTacToeModel extends Observable implements Serializable {
         size = 3;
         initializeBoard();
         computer = new TicTacToeAI();
-        computer.setStrategy(/* TODO fill in strategy name */);
+        computer.setStrategy(new EasyAI());
         setChanged();
         notifyObservers();
     }
@@ -63,8 +63,8 @@ public class TicTacToeModel extends Observable implements Serializable {
      * 
      * @param strat the strategy used by the computer to determine its move
      */
-    public void setAIStrategy(/* TODO fill in strategy type */) {
-
+    public void setAIStrategy(TicTacToeStrategy AI) {
+    	this.computer.setStrategy(AI);
     }
 
     /**

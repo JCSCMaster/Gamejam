@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import model.EasyAI;
 import model.TicTacToeModel;
 
 /**
@@ -28,7 +29,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
 
     public TicTacToeControllerView() {
         gameModel = new TicTacToeModel();
-        gameModel.setAIStrategy(/* TODO add strategy info here */);
+        gameModel.setAIStrategy(new EasyAI());
         initializeGame();
     }
 
