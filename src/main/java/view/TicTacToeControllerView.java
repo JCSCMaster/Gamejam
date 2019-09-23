@@ -133,10 +133,10 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         drawBoard();
         System.out.println(gameModel.toString());
-        if (gameModel.won('X') || gameModel.won('C')) {
+        if (gameModel.won('X') || gameModel.won('O')) {
             String winningDirection = gameModel.getWinningDirection();
             Point[] winningSquares = gameModel.getWinningSquares(winningDirection);
-            gc.setStroke(Color.MEDIUMVIOLETRED);
+            gc.setStroke(Color.BLUE);
             
             switch(winningDirection) {
             case "horizontal":
@@ -160,6 +160,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
                 }
                 break;
             }
+            gc.setStroke(Color.BLACK);
         }
     }
 
