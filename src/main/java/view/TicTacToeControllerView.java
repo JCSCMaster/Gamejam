@@ -62,7 +62,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
      */
     private void setupResources() {
         xImage = new Image(TicTacToeControllerView.class.getResource("/letterX.png").toString());
-        //yImage = new Image("letterX.png");
+        yImage = new Image(TicTacToeControllerView.class.getResource("/letterO.png").toString());
     }
 
     /**
@@ -116,7 +116,10 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         this.setOnMouseClicked((click) -> {
             int x = (int) click.getX() / 200;
             int y = (int) click.getY() / 200;
-            gameModel.humanMove(y, x, false);
+            if(gameModel.available(y, x)) {
+                gameModel.humanMove(y, x, false);
+                //add sound effect
+            }
         });
     }
 
