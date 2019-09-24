@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import model.EasyAI;
 import model.TicTacToeModel;
 
 /**
@@ -28,7 +29,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
 
     public TicTacToeControllerView() {
         gameModel = new TicTacToeModel();
-        gameModel.setAIStrategy(/* TODO add strategy info here */);
+        gameModel.setAIStrategy(new EasyAI());
         initializeGame();
     }
 
@@ -132,10 +133,10 @@ public class TicTacToeControllerView extends Canvas implements Observer {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         drawBoard();
         System.out.println(gameModel.toString());
-        if (gameModel.won('X') || gameModel.won('C')) {
+        if (gameModel.won('X') || gameModel.won('O')) {
             String winningDirection = gameModel.getWinningDirection();
             Point[] winningSquares = gameModel.getWinningSquares(winningDirection);
-            gc.setStroke(Color.MEDIUMVIOLETRED);
+            gc.setStroke(Color.BLUE);
             
             switch(winningDirection) {
             case "horizontal":
@@ -159,6 +160,7 @@ public class TicTacToeControllerView extends Canvas implements Observer {
                 }
                 break;
             }
+            gc.setStroke(Color.BLACK);
         }
     }
 

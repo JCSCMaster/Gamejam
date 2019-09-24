@@ -31,7 +31,7 @@ public class TicTacToeModel extends Observable implements Serializable {
         size = 3;
         initializeBoard();
         computer = new TicTacToeAI();
-        computer.setStrategy(/* TODO fill in strategy name */);
+        computer.setStrategy(new EasyAI());
         setChanged();
         notifyObservers();
     }
@@ -63,8 +63,8 @@ public class TicTacToeModel extends Observable implements Serializable {
      * 
      * @param strat the strategy used by the computer to determine its move
      */
-    public void setAIStrategy(/* TODO fill in strategy type */) {
-
+    public void setAIStrategy(TicTacToeStrategy AI) {
+    	this.computer.setStrategy(AI);
     }
 
     /**
@@ -92,7 +92,7 @@ public class TicTacToeModel extends Observable implements Serializable {
         board[row][col] = 'X';
         if (!test && this.isStillRunning()) {
             Point move = computer.nextMove(this);
-            // computerMove(move.x, move.y);
+            computerMove(move.x, move.y);
         }
         setChanged();
         notifyObservers();
@@ -134,11 +134,7 @@ public class TicTacToeModel extends Observable implements Serializable {
         return wonVertically(c) || wonHorizontally(c) || wonDiagonally(c);
     }
 
-    // TODO check to see if this is bad style. It's hard coding, but tic tac toe
-    // specifically uses
-    // a 3 by 3 board and this lets me check diagonals in a couple of lines
-    // instead
-    // of almost 20.
+    
     /**
      * checks the two diagonals to see if the player won
      * 

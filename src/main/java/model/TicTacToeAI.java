@@ -12,20 +12,20 @@ import java.awt.Point;
 
 public class TicTacToeAI {
 
-    // TODO insert tictactoestrategy field
+	private TicTacToeStrategy AIStrategy;
 
     /**
      * Constructor for the TicTacToeAI
      */
     public TicTacToeAI() {
-        // TODO strategy = new strategy();
+    	AIStrategy = new EasyAI();
     }
 
     /**
      * Setter for strategy type
      */
-    public void setStrategy(/* TODO insert strategy here */) {
-        // TODO strategy = parameterStrategy;
+    public void setStrategy(TicTacToeStrategy NewStrategy) {
+        AIStrategy = NewStrategy;
     }
 
     /**
@@ -35,8 +35,8 @@ public class TicTacToeAI {
      * @return a java.awt.Point storing an x and y (row and col) value
      */
     public Point nextMove(TicTacToeModel ticTacToeModel) {
-        // TODO return strategy.nextMove(ticTacToeModel);
-        return null;
+        
+        return AIStrategy.desiredMove(ticTacToeModel);
     }
 
 }
