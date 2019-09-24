@@ -4,7 +4,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 /**
  * The MainScreen view. 
@@ -24,6 +27,7 @@ public class GamejamMainScreen extends BorderPane {
 	 */
 	private void init() {
 		this.setTop(_getTop());
+		this.setCenter(_getCenter());
 	}
 	/**
 	 * Gets the item that is surposed to be the top most part of the application
@@ -35,27 +39,42 @@ public class GamejamMainScreen extends BorderPane {
 		Menu accountmenu =  new Menu("Accounts");
 		MenuItem loginopt = new MenuItem("Log in");
 		MenuItem logoutopt = new MenuItem("Log out");
-		accountmenu.getItems().addAll(loginopt,logoutopt);
+		MenuItem createaccountopt = new MenuItem("Create Account");
+		
+		accountmenu.getItems().addAll(loginopt,logoutopt,createaccountopt);
 		Menu optionmenu = new Menu("Options");
 		bar.getMenus().addAll(accountmenu,optionmenu);
 		return bar;
 	}
+	/**
+	 * Gets the item that surposed to be in the center of the application.
+	 * In this case its the game selector menu.
+	 * @return A grid pane of all the buttons to lead to each game.
+	 */
 	private GridPane _getCenter() {
-		GridPane n = new GridPane();
+		GridPane grid = new GridPane();
+		grid.getColumnConstraints().add(new ColumnConstraints(260));
+		grid.getColumnConstraints().add(new ColumnConstraints(260));
+		grid.getColumnConstraints().add(new ColumnConstraints(260));
+		grid.getColumnConstraints().add(new ColumnConstraints(260));
 		gameiconitem[] gamelist = getGameList();
-		int y = 0;
 		for(int x = 0; x < gamelist.length; x++) {
 			Button gamebutton = new Button();
-			gamebutton.setGraphic()
+			Image icon = new Image(getClass().getResourceAsStream(gamelist[x].getIconFilePath()));
+			gamebutton.setGraphic(new ImageView(icon));
+			gamebutton.setOnMouseClicked((click) -> {
+	           System.out.println("Button Click!");
+	        });
+			grid.add(gamebutton, x % 4, x / 4);
 		}
-		return n;
+		return grid;
 	}
 	/**
 	 * Fetches all the games that are implemented
 	 */
 	private gameiconitem[] getGameList() {
 		gameiconitem[] retval = new gameiconitem[1];
-		gameiconitem tictactoe = new gameiconitem("Tic-tac-toe","/tictactoeicon.png",0);
+		retval[0]  = new gameiconitem("Tic-tac-toe","/tictactoeicon.png",0);
 		return retval;
 	}
 	/**
