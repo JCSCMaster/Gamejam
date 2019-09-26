@@ -22,10 +22,8 @@ public class Gamejam extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Game Jam");
-		BorderPane basepane = new BorderPane();
-		basepane.setCenter(new GamejamMainScreen());
-		//basepane.setCenter(new TicTacToeControllerView());
-		Scene scene = new Scene(basepane, 800, 800);
+		GamejamMainScreen screen = new GamejamMainScreen();
+		Scene scene = new Scene(screen, 800, 800);
 		stage.setScene(scene);
 		stage.show();
 		
